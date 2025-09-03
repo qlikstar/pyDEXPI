@@ -9,12 +9,11 @@ authors:
     orcid: 0000-0001-7494-9110
   - family-names: Alimin
     given-names: Achmad Anggawirya
-    orcid: 
+    orcid: 0000-0001-6382-8196
   - family-names: Schweidtmann
     given-names: Artur
     orcid: 0000-0001-8885-6847
-date-released: 2024-06-07
-title: "pyDEXPI: A python tool for the DEXPI data model"
-version: 0.2.0
-doi: addZenodoLinkHere
+date-released: 2025-07-08
+title: "pyDEXPI: A Python framework for piping and instrumentation diagrams (P&IDs) using the DEXPI information model"
+doi: https://doi.org/10.69997/sct.139043
 url: "https://github.com/process-intelligence-research/pyDEXPI"

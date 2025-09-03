@@ -55,7 +55,8 @@ class DexpiDataTypeBaseModel(ABC, BaseModel):
         """Computes object hash from combined hash of all model fields and the type."""
         # Return the combined hash of all model fields
         return hash(
-            tuple(hash(getattr(self, field)) for field in self.model_fields) + (type(self),)
+            tuple(hash(getattr(self, field)) for field in self.__class__.model_fields)
+            + (type(self),)
         )
 
     def __eq__(self, other):

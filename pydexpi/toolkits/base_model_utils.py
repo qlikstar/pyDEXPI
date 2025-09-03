@@ -85,7 +85,7 @@ def _get_attributes_with_category(
     """
 
     attribute_dict = {}
-    for fld_name, field in dexpi_object.model_fields.items():
+    for fld_name, field in dexpi_object.__class__.model_fields.items():
         if field.json_schema_extra is not None:
             if "attribute_category" in field.json_schema_extra:
                 if field.json_schema_extra["attribute_category"] == category:

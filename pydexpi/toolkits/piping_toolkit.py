@@ -76,11 +76,8 @@ class PipingConnectionConvention(Enum):
     USE_ITEMS = 1
 
 
-def segment_is_free_and_unconnected(
-    the_segment: piping.PipingNetworkSegment, as_source=False
-) -> bool:
-    """Checks if a segment ends in a connection that is unconnected, in which
-    case it is suitable for connection
+def segment_ends_in_connection(the_segment: piping.PipingNetworkSegment, as_source=False) -> bool:
+    """Checks if a segment ends in a connection, as opposed to an item.
 
     Parameters
     ----------
@@ -92,7 +89,7 @@ def segment_is_free_and_unconnected(
     Returns
     -------
     bool
-        True if the segment is free and unconnected
+        True if the segment ends in a connection.
     """
     if not the_segment.connections:
         return False

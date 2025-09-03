@@ -1,6 +1,5 @@
 """Tests for the module dexpi_pattern."""
 
-
 import pytest
 
 from pydexpi.dexpi_classes import equipment, piping

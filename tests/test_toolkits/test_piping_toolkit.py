@@ -6,11 +6,11 @@ from pydexpi.dexpi_classes import piping
 from pydexpi.toolkits import piping_toolkit as pt
 
 
-def test_segment_is_free_and_unconnected(simple_pns_factory):
-    """Test evaluating if a segment is free and unconnected"""
+def test_segment_ends_in_connection(simple_pns_factory):
+    """Test evaluating if a segment ends in a connection."""
     segment = simple_pns_factory()
-    assert pt.segment_is_free_and_unconnected(segment) is False
-    assert pt.segment_is_free_and_unconnected(segment, as_source=True) is True
+    assert pt.segment_ends_in_connection(segment) is False
+    assert pt.segment_ends_in_connection(segment, as_source=True) is True
 
 
 def test_segments_are_connected(simple_pns_factory):

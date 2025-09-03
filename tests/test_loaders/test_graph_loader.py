@@ -7,8 +7,8 @@ from pydexpi.loaders import MLGraphLoader
 @pytest.fixture
 def graph_loader(loaded_example_dexpi):
     dexpi_model = loaded_example_dexpi
-    my_graph_loader = MLGraphLoader(plant_model=dexpi_model)
-    my_graph_loader.parse_dexpi_to_graph()
+    my_graph_loader = MLGraphLoader()
+    my_graph_loader.dexpi_to_graph(dexpi_model)
     return my_graph_loader
 
 

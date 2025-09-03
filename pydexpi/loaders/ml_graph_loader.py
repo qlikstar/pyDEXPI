@@ -68,8 +68,10 @@ class MLGraphLoader(NXGraphLoader):
         self.plant_graph = DiGraph()
         self.plant_model = dexpi_model
 
-        # Call and return parse to plant
-        return self.parse_dexpi_to_graph()
+        self.parse_equipment_and_piping()
+        self.parse_instrumentation()
+
+        return self.plant_graph
 
     def graph_to_dexpi(self, plant_graph: DiGraph) -> DexpiModel:
         """Parsing the example graph back to pyDEXPI is not supported yet."""
@@ -113,7 +115,7 @@ class MLGraphLoader(NXGraphLoader):
         self.validate_node_classes(node_class)
         self.validate_node_attributes(node, node_class, special_node_attributes)
 
-    def validate_node_classes(self, node_class: DexpiBaseModel):
+    def validate_node_classes(self, node_class: type[DexpiBaseModel]):
         """Validate the node class name against the allowed node classes.
         The following classes are allowed as nodes:
         - NozzleOwner
@@ -127,7 +129,7 @@ class MLGraphLoader(NXGraphLoader):
 
         Parameters
         ----------
-        node_class : DexpiBaseModel
+        node_class : type[DexpiBaseModel]
             Class to be validated.
 
         Raises
@@ -149,7 +151,7 @@ class MLGraphLoader(NXGraphLoader):
             raise AttributeError(f"'{node_class.__name__}' not a valid DEXPI class or node.")
 
     def validate_node_attributes(
-        self, node: dict, node_class: DexpiBaseModel, special_node_attributes: list[str] = []
+        self, node: dict, node_class: type[DexpiBaseModel], special_node_attributes: list[str] = []
     ):
         """Validate attributes of a node against the DEXPI class and its allowed attributes.
 
@@ -157,7 +159,7 @@ class MLGraphLoader(NXGraphLoader):
         ----------
         node : dict
             Attributes of the node.
-        node_class : DexpiBaseModel
+        node_class : type[DexpiBaseModel]
             Class of the node.
         special_node_attributes : list[str]
             Node attributes besides "dexpi_class" and besides attributes of a DEXPI class.
@@ -206,12 +208,12 @@ class MLGraphLoader(NXGraphLoader):
         target_class = get_dexpi_class(target_class_name)
         self.validate_edge_targets(target_class, edge_class)
 
-    def validate_edge_classes(self, edge_class: DexpiBaseModel):
+    def validate_edge_classes(self, edge_class: type[DexpiBaseModel]):
         """Validate the edge class name against the allowed edge classes.
 
         Parameters
         ----------
-        edge_class : DexpiBaseModel
+        edge_class : type[DexpiBaseModel]
             Edge class to be validated.
 
         Raises
@@ -229,7 +231,7 @@ class MLGraphLoader(NXGraphLoader):
             raise AttributeError(f"'{edge_class.__name__}' not a valid DEXPI class or edge.")
 
     def validate_edge_attributes(
-        self, edge: dict, edge_class: DexpiBaseModel, special_edge_attributes: list[str] = []
+        self, edge: dict, edge_class: type[DexpiBaseModel], special_edge_attributes: list[str] = []
     ):
         """Validate the attributes of an edge against the DEXPI class and its allowed attributes.
 
@@ -237,7 +239,7 @@ class MLGraphLoader(NXGraphLoader):
         ----------
         edge : dict
             Attributes of the edge.
-        edge_class : DexpiBaseModel
+        edge_class : type[DexpiBaseModel]
             Class of the edge.
         special_edge_attributes : list[str]
             Edge attributes besides "dexpi_class" and besides attributes of a DEXPI class.
@@ -258,14 +260,16 @@ class MLGraphLoader(NXGraphLoader):
                     f"Attribute {key} not valid for DEXPI class {edge['dexpi_class']}."
                 )
 
-    def validate_edge_sources(self, source: DexpiBaseModel, edge: DexpiBaseModel):
+    def validate_edge_sources(
+        self, source_class: type[DexpiBaseModel], edge_class: type[DexpiBaseModel]
+    ):
         """Validates if the source node is allowed to be connected to the edge.
 
         Parameters
         ----------
-        source : DexpiBaseModel
+        source_class : type[DexpiBaseModel]
             Source node class.
-        edge : DexpiBaseModel
+        edge_class : type[DexpiBaseModel]
             Edge class.
 
         Raises
@@ -273,18 +277,18 @@ class MLGraphLoader(NXGraphLoader):
         AttributeError
             Edge source is not valid.
         """
-        if issubclass(edge, piping.PipingConnection):
+        if issubclass(edge_class, piping.PipingConnection):
             if not issubclass(
-                source,
+                source_class,
                 (equipment.NozzleOwner | piping.PipingNetworkSegmentItem),
             ):
                 raise AttributeError(
-                    f"Source of {edge.__name__} must be NozzleOwner or PipingNetworkSegmentItem."
+                    f"Source of {edge_class.__name__} must be NozzleOwner or PipingNetworkSegmentItem."
                 )
 
-        elif issubclass(edge, instrumentation.SignalConveyingFunction):
+        elif issubclass(edge_class, instrumentation.SignalConveyingFunction):
             if not issubclass(
-                source,
+                source_class,
                 (
                     equipment.NozzleOwner
                     | piping.PipingNetworkSegmentItem
@@ -294,31 +298,33 @@ class MLGraphLoader(NXGraphLoader):
                 ),
             ):
                 raise AttributeError(
-                    f"Source of {edge.__name__} should be connected to at least one instrumentation object."
+                    f"Source of {edge_class.__name__} should be connected to at least one instrumentation object."
                 )
 
-        elif issubclass(edge, instrumentation.OperatedValveReference):
+        elif issubclass(edge_class, instrumentation.OperatedValveReference):
             if not issubclass(
-                source, (instrumentation.ControlledActuator | instrumentation.Positioner)
+                source_class, (instrumentation.ControlledActuator | instrumentation.Positioner)
             ):
                 raise AttributeError(
-                    f"Source of {edge.__name__} should connect ControlledActuator or Positioner to (subclass of) OperatedValve."
+                    f"Source of {edge_class.__name__} should connect ControlledActuator or Positioner to (subclass of) OperatedValve."
                 )
 
-        elif issubclass(edge, instrumentation.ElectronicFrequencyConverter):
-            if not issubclass(source, instrumentation.ProcessInstrumentationFunction):
+        elif issubclass(edge_class, instrumentation.ElectronicFrequencyConverter):
+            if not issubclass(source_class, instrumentation.ProcessInstrumentationFunction):
                 raise AttributeError(
-                    f"Source of {edge.__name__} must be ProcessInstrumentationFunction."
+                    f"Source of {edge_class.__name__} must be ProcessInstrumentationFunction."
                 )
 
-    def validate_edge_targets(self, target: DexpiBaseModel, edge: DexpiBaseModel):
+    def validate_edge_targets(
+        self, target_class: type[DexpiBaseModel], edge_class: type[DexpiBaseModel]
+    ):
         """Validates if the target node is allowed to be connected to the edge.
 
         Parameters
         ----------
-        target : DexpiBaseModel
+        target_class : type[DexpiBaseModel]
             Target node of the edge.
-        edge : DexpiBaseModel
+        edge_class : type[DexpiBaseModel]
             Edge class.
 
         Raises
@@ -326,18 +332,18 @@ class MLGraphLoader(NXGraphLoader):
         AttributeError
             Edge target is not valid.
         """
-        if issubclass(edge, piping.PipingConnection):
+        if issubclass(edge_class, piping.PipingConnection):
             if not issubclass(
-                target,
+                target_class,
                 (equipment.NozzleOwner | piping.PipingNetworkSegmentItem),
             ):
                 raise AttributeError(
-                    f"Target of {edge.__name__} must be NozzleOwner or PipingNetworkSegmentItem."
+                    f"Target of {edge_class.__name__} must be NozzleOwner or PipingNetworkSegmentItem."
                 )
 
-        elif issubclass(edge, instrumentation.SignalConveyingFunction):
+        elif issubclass(edge_class, instrumentation.SignalConveyingFunction):
             if not issubclass(
-                target,
+                target_class,
                 (
                     instrumentation.ProcessInstrumentationFunction
                     | instrumentation.ControlledActuator
@@ -346,19 +352,19 @@ class MLGraphLoader(NXGraphLoader):
                 ),
             ):
                 raise AttributeError(
-                    f"Target of {edge.__name__} must be ProcessInstrumentationFunction, ControlledActuator, or Positioner."
+                    f"Target of {edge_class.__name__} must be ProcessInstrumentationFunction, ControlledActuator, or Positioner."
                 )
 
-        elif issubclass(edge, instrumentation.OperatedValveReference):
-            if not issubclass(target, piping.OperatedValve):
+        elif issubclass(edge_class, instrumentation.OperatedValveReference):
+            if not issubclass(target_class, piping.OperatedValve):
                 raise AttributeError(
-                    f"Target of {edge.__name__} must be (subclass of) OperatedValve."
+                    f"Target of {edge_class.__name__} must be (subclass of) OperatedValve."
                 )
 
-        elif issubclass(edge, instrumentation.ElectronicFrequencyConverter):
-            if not issubclass(target, instrumentation.ElectronicFrequencyConverter):
+        elif issubclass(edge_class, instrumentation.ElectronicFrequencyConverter):
+            if not issubclass(target_class, instrumentation.ElectronicFrequencyConverter):
                 raise AttributeError(
-                    f"Target of {edge.__name__} must be ElectronicFrequencyConverter."
+                    f"Target of {edge_class.__name__} must be ElectronicFrequencyConverter."
                 )
 
     def add_node(self, obj: DexpiBaseModel) -> None:
@@ -415,14 +421,6 @@ class MLGraphLoader(NXGraphLoader):
             return
 
         self.plant_graph.add_edge(source.id, target.id, **attributes)
-
-    def parse_dexpi_to_graph(self):
-        """Parse a given DexpiModel to a networkX graph."""
-
-        self.parse_equipment_and_piping()
-        self.parse_instrumentation()
-
-        return self.plant_graph
 
     def parse_equipment_and_piping(self):
         """Create networkX graph from equipment and piping"""
@@ -540,10 +538,6 @@ class MLGraphLoader(NXGraphLoader):
         # ProcessInstrumentationFunction, SignalOffPageConnector
         else:
             return dexpi_object
-
-    def parse_graph_to_dexpi(self):
-        """Parse a networkX graph of DEXPI classes to a DexpiModel. Not implemented yet."""
-        raise NotImplementedError
 
     def draw_process_matplotlib(self) -> Figure:
         """Draw the process graph using matplotlib.pyplot.

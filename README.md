@@ -1,10 +1,10 @@
 <!-- omit from toc -->
-# pyDEXPI by [<img src="./docs/logos/Process_Intelligence_Black_Horizontal.png" alt="Process Intelligence Research logo" height="40">](https://www.pi-research.org/)
+# pyDEXPI by [<img src="https://raw.githubusercontent.com/process-intelligence-research/pyDEXPI/master/docs/logos/Process_Intelligence_Black_Horizontal.png" alt="Process Intelligence Research logo" height="40" style="background-color: white; padding: 10px;">](https://www.pi-research.org/)
 
 
 
 <p align="center">
-  <img src="./docs/logos/pydexpi_logo.png" alt="pyDEXPI logo" width="700">  
+  <img src="https://raw.githubusercontent.com/process-intelligence-research/pyDEXPI/refs/heads/master/docs/logos/pydexpi_logo.png" alt="pyDEXPI logo" width="700" style="background-color: white; padding: 10px;">  
 </p>
 
 ## Overview
@@ -19,7 +19,7 @@ Supports DEXPI version 1.3.
 
 
 <p align="center">
-  <img src="./docs/pyDEXPI_graphical_overview.png" alt="pyDEXPI graphical overview" width="700">  
+  <img src="https://raw.githubusercontent.com/process-intelligence-research/pyDEXPI/master/docs/pyDEXPI_graphical_overview.png" alt="pyDEXPI graphical overview" width="700">  
 </p>
 
 
@@ -140,7 +140,7 @@ dummy_dexpi_model = my_serializer.load("dummy_path", "dummy_filename")
 
 ### Graph export
 
-The [graph loader](pydexpi/loaders/graph_loader.py) exports a DEXPI model to a [NetworkX](https://networkx.org/) graph. This is implemented as an abstract class to accommodate customized graph formats. The package includes an implementation for direct application [MLGraphLoader](pydexpi/loaders/ml_graph_loader.py). Here, we represent DEXPI components such as tagged plant equipment, process instrumentation functions, and piping components as nodes. The connectivity between the nodes represent piping connections or signal connections as directed edges. Data attributes of the pyDEXPI classes are added as node/edge attributes of the respective, representing node.
+The [graph loader](pydexpi/loaders/graph_loader.py) exports a DEXPI model to a [NetworkX](https://networkx.org/) graph. This is implemented as an abstract class to accommodate customized graph formats. The package includes an implementation for direct application [MLGraphLoader](pydexpi/loaders/ml_graph_loader.py). Here, we represent DEXPI components such as tagged plant equipment, process instrumentation functions, and piping components as nodes. The connectivity between the nodes represent piping connections or signal connections as directed edges. Data attributes of the pyDEXPI classes are added as node/edge attributes of the respective, representing node/edge. More details of the graph format are described [here](docs/DEXPI2graph.pdf).
 
 ```python
 from pydexpi.loaders.ml_graph_loader import MLGraphLoader
@@ -208,10 +208,10 @@ syn_pattern = the_generator.generate_pattern("New pattern label")
 
 | | | |
 | --- | --- | --- |
-| <img src="docs/photos/Donimik.jpg" width="50"> | [Dominik P. Goldstein](https://www.pi-research.org/author/dominik-goldstein/) | <a href="https://www.linkedin.com/in/dominik-goldstein-9a669324b/" rel="nofollow noreferrer"> <img src="https://i.sstatic.net/gVE0j.png" >  </a> <a href="https://scholar.google.com/citations?user=4s7fSyIAAAAJ&hl=en" rel="nofollow noreferrer"> <img src="docs/logos/google-scholar-square.svg" width="14">  </a> |
-| <img src="docs/photos/Lukas.jpg" width="50"> | [Lukas Schulze Balhorn](https://www.pi-research.org/author/lukas-schulze-balhorn/) | <a href="https://www.linkedin.com/in/lukas-schulze-balhorn-12a3a4205/" rel="nofollow noreferrer"> <img src="https://i.sstatic.net/gVE0j.png" >  </a> <a href="https://scholar.google.com/citations?user=LZZ7piQAAAAJ&hl=en" rel="nofollow noreferrer"> <img src="docs/logos/google-scholar-square.svg" width="14">  </a> |
-| <img src="docs/photos/Achmad.png" width="50"> | [Achmad Anggawirya Alimin](https://www.pi-research.org/author/achmad-a.-alimin/) | <a href="https://www.linkedin.com/in/anggawirya/" rel="nofollow noreferrer"> <img src="https://i.sstatic.net/gVE0j.png" >  </a> <a href="https://scholar.google.com/citations?user=zO7yftgAAAAJ&hl=en" rel="nofollow noreferrer"> <img src="docs/logos/google-scholar-square.svg" width="14">  </a> |
-| <img src="docs/photos/Artur.jpg" width="50"> | [Artur M. Schweidtmann](https://www.pi-research.org/author/artur-schweidtmann/) | <a href="https://www.linkedin.com/in/schweidtmann/" rel="nofollow noreferrer"> <img src="https://i.sstatic.net/gVE0j.png" >  </a> <a href="https://scholar.google.com/citations?user=g-GwouoAAAAJ&hl=en" rel="nofollow noreferrer"> <img src="docs/logos/google-scholar-square.svg" width="14">  </a> |
+| <img src="https://raw.githubusercontent.com/process-intelligence-research/pyDEXPI/master/docs/photos/Donimik.jpg" width="50"> | [Dominik P. Goldstein](https://www.pi-research.org/author/dominik-goldstein/) | <a href="https://www.linkedin.com/in/dominik-goldstein-9a669324b/" rel="nofollow noreferrer"> <img src="https://i.sstatic.net/gVE0j.png" >  </a> <a href="https://scholar.google.com/citations?user=4s7fSyIAAAAJ&hl=en" rel="nofollow noreferrer"> <img src="https://raw.githubusercontent.com/process-intelligence-research/pyDEXPI/master/docs/logos/google-scholar-square.svg" width="14">  </a> |
+| <img src="https://raw.githubusercontent.com/process-intelligence-research/pyDEXPI/master/docs/photos/Lukas.jpg" width="50"> | [Lukas Schulze Balhorn](https://www.pi-research.org/author/lukas-schulze-balhorn/) | <a href="https://www.linkedin.com/in/lukas-schulze-balhorn-12a3a4205/" rel="nofollow noreferrer"> <img src="https://i.sstatic.net/gVE0j.png" >  </a> <a href="https://scholar.google.com/citations?user=LZZ7piQAAAAJ&hl=en" rel="nofollow noreferrer"> <img src="https://raw.githubusercontent.com/process-intelligence-research/pyDEXPI/master/docs/logos/google-scholar-square.svg" width="14">  </a> |
+| <img src="https://raw.githubusercontent.com/process-intelligence-research/pyDEXPI/master/docs/photos/Achmad.png" width="50"> | [Achmad Anggawirya Alimin](https://www.pi-research.org/author/achmad-a.-alimin/) | <a href="https://www.linkedin.com/in/anggawirya/" rel="nofollow noreferrer"> <img src="https://i.sstatic.net/gVE0j.png" >  </a> <a href="https://scholar.google.com/citations?user=zO7yftgAAAAJ&hl=en" rel="nofollow noreferrer"> <img src="https://raw.githubusercontent.com/process-intelligence-research/pyDEXPI/master/docs/logos/google-scholar-square.svg" width="14">  </a> |
+| <img src="https://raw.githubusercontent.com/process-intelligence-research/pyDEXPI/master/docs/photos/Artur.jpg" width="50"> | [Artur M. Schweidtmann](https://www.pi-research.org/author/artur-schweidtmann/) | <a href="https://www.linkedin.com/in/schweidtmann/" rel="nofollow noreferrer"> <img src="https://i.sstatic.net/gVE0j.png" >  </a> <a href="https://scholar.google.com/citations?user=g-GwouoAAAAJ&hl=en" rel="nofollow noreferrer"> <img src="https://raw.githubusercontent.com/process-intelligence-research/pyDEXPI/master/docs/logos/google-scholar-square.svg" width="14">  </a> |
 
 ## Copyright and license
 
