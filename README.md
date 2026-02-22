@@ -113,7 +113,19 @@ dexpi_model = my_loader.load(directory_path, filename)
 
 ### Serialization
 
-You can load and save DEXPI Python models via the [serializer](pydexpi/loaders/serializer.py). Currently pickle `.pkl` and json `.json` are offered as file formats.
+You can load and save DEXPI Python models via the [serializer](pydexpi/loaders/serializer.py). Currently pickle `.pkl`, json `.json`, and Proteus XML `.xml` are offered as file formats.
+
+For Proteus XML (supports both load and save):
+
+```python
+from pydexpi.loaders import ProteusSerializer
+
+my_serializer = ProteusSerializer()
+# Load from XML
+dexpi_model = my_serializer.load("data", "C01V04-VER.EX01")
+# Save to XML
+my_serializer.save(dexpi_model, "output_path", "saved_model")
+```
 
 For json:
 

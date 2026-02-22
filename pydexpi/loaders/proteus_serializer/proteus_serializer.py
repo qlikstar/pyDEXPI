@@ -3,6 +3,7 @@ from pathlib import Path
 from pydexpi.dexpi_classes.pydantic_classes import DexpiModel
 from pydexpi.loaders.proteus_serializer.core import ParserFactoryProtocol, ProteusLoader
 from pydexpi.loaders.proteus_serializer.parser_factory import ParserFactory
+from pydexpi.loaders.proteus_serializer.xml_writer import ProteusXMLWriter
 from pydexpi.loaders.serializer import Serializer
 
 
@@ -21,11 +22,25 @@ class ProteusSerializer(Serializer):
 
         parser_factory = parser_factory or ParserFactory()
         self.proteus_loader = ProteusLoader(parser_factory)
+        self.xml_writer = ProteusXMLWriter()
 
     def save(self, model: DexpiModel, dir_path: Path, filename: str):
-        """Saves a DEXPI model to a file using the ProteusLoader. Currently not implemented."""
-        # The ProteusLoader does not support saving models directly.
-        raise NotImplementedError("ProteusSerializer does not support saving models.")
+        """Saves a DEXPI model to an XML file in Proteus format.
+
+        Parameters
+        ----------
+        model : DexpiModel
+            DEXPI model that should be saved.
+        dir_path : Path
+            Directory where the DEXPI model should be saved.
+        filename : str
+            Filename for the saved DEXPI model.
+        """
+        if not filename.endswith(".xml"):
+            filename += ".xml"
+        path = Path(dir_path) / filename
+
+        self.xml_writer.write_to_file(model, path)
 
     def load(self, dir_path: Path, filename: str) -> DexpiModel:
         """Loads a DEXPI model from a file using the ProteusLoader.
