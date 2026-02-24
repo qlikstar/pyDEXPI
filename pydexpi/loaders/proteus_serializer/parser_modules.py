@@ -892,7 +892,7 @@ class EquipmentParser(ParserModule):
             self.register_error(*ErrorTemplates.id_not_found("Equipment"))
             return None
 
-        kwargs = {}
+        kwargs = {"id": self.equipment_id}
 
         # Get the equipment type
         class_name = self.element.get("ComponentClass")
@@ -1393,7 +1393,7 @@ class PipingComponentParser(ParserModule):
             self.register_error(*ErrorTemplates.id_not_found("PipingComponent"))
             return None
 
-        kwargs = {}
+        kwargs = {"id": self.component_id}
 
         # Get the component type
         class_name = self.element.get("ComponentClass")
@@ -4606,7 +4606,7 @@ class PlantModelParser(ParserModule):
                 level=ErrorLevels.WARNING,
             )
         sch_ver = plant_info.get("SchemaVersion")
-        if sch_ver[0:3] != "4.1":
+        if sch_ver is not None and sch_ver[0:3] != "4.1":
             self.register_error(
                 f"Unexpected SchemaVersion value: {sch_ver}. Expected '4.1'.",
                 level=ErrorLevels.WARNING,

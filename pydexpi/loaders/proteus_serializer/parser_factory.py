@@ -342,8 +342,15 @@ class ParserFactory:
         ordered_element_parsers = []
         item_parsers = []
         center_line_parsers = []
+        
+        # Specific valve types that should be parsed as piping components
+        valve_types = {
+            "GateValve", "GlobeValve", "BallValve", "ButterflyValve", "CheckValve",
+            "ControlValve", "ReliefValve", "SafetyValve", "NeedleValve", "PlugValve"
+        }
+        
         for subelement in element:
-            if subelement.tag == "PipingComponent":
+            if subelement.tag == "PipingComponent" or subelement.tag in valve_types:
                 sub_context = context.get_updated_context(subelement)
                 component_parser = self.make_piping_component_parser(sub_context, subelement)
                 ordered_element_parsers.append(component_parser)
@@ -588,8 +595,17 @@ class ParserFactory:
 
         Includes parsing equipment, piping network systems, and actuating systems.
         """
-        # Make equipment parsers
+        # Make equipment parsers - parse both generic Equipment tags and specific equipment types
         equipment_parsers = self._parse_child_elements(element, context, "Equipment")
+        
+        # Also parse specific equipment types (Vessel, Pump, HeatExchanger, etc.)
+        specific_equipment_types = [
+            "Vessel", "Tank", "ProcessColumn", "TubularHeatExchanger",
+            "CentrifugalPump", "ReciprocatingPump", "Compressor",
+            "Pump", "HeatExchanger", "Column"
+        ]
+        for eq_type in specific_equipment_types:
+            equipment_parsers.extend(self._parse_child_elements(element, context, eq_type, "Equipment"))
 
         # Make piping network system parsers
         piping_network_system_parsers = self._parse_child_elements(

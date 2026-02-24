@@ -28,9 +28,11 @@ from .pydantic_classes import (
     SignalConveyingFunctionSource,
     SignalConveyingFunctionTarget,
     SignalLineFunction,
+    SignalLineSystem,
     SignalOffPageConnector,
     SignalOffPageConnectorObjectReference,
     SignalOffPageConnectorReference,
     SignalOffPageConnectorReferenceByNumber,
     Transmitter,
+    TaggedPlantItem
 )

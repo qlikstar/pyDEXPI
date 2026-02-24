@@ -107,6 +107,9 @@ class ConceptualModel(DexpiBaseModel):
     processSignalGeneratingSystems: list[ProcessSignalGeneratingSystem] = Field(
         default_factory=list, json_schema_extra={"attribute_category": "composition"}
     )
+    signalLineSystems: list[SignalLineSystem] = Field(
+        default_factory=list, json_schema_extra={"attribute_category": "composition"}
+    )
     taggedPlantItems: list[TaggedPlantItem] = Field(
         default_factory=list, json_schema_extra={"attribute_category": "composition"}
     )
@@ -2789,6 +2792,23 @@ class ProcessSignalGeneratingSystem(CustomAttributeOwner, TechnicalItem):
 
     # Data attributes:
     processSignalGeneratingSystemNumber: str | None = Field(
+        None, json_schema_extra={"attribute_category": "data"}
+    )
+    typicalInformation: str | None = Field(None, json_schema_extra={"attribute_category": "data"})
+
+
+class SignalLineSystem(CustomAttributeOwner, TechnicalItem):
+    """An assembly of artefacts that is designed to fulfill signal line functions."""
+
+    uri: str = "https://pyDEXPI.org/schemas/pydexpi_1_3/instrumentation/signalLineSystem.py"
+
+    # Compositional attributes:
+    signalLineFunctions: list[SignalLineFunction] = Field(
+        default_factory=list, json_schema_extra={"attribute_category": "composition"}
+    )
+
+    # Data attributes:
+    signalLineSystemNumber: str | None = Field(
         None, json_schema_extra={"attribute_category": "data"}
     )
     typicalInformation: str | None = Field(None, json_schema_extra={"attribute_category": "data"})
